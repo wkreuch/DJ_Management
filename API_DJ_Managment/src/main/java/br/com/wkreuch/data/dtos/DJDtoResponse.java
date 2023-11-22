@@ -1,36 +1,25 @@
-package br.com.wkreuch.models;
+package br.com.wkreuch.data.dtos;
 
-import jakarta.persistence.*;
+import br.com.wkreuch.controllers.DJController;
+import org.springframework.hateoas.RepresentationModel;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@Entity
-@Table(name = "djs")
-public class DJ {
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+public class DJDtoResponse extends RepresentationModel<DJDtoResponse> implements Serializable {
+
     private Long idDj;
-
-    @Column(name = "first_name", length = 125, nullable = false)
     private String firstName;
-
-    @Column(name = "last_name", length = 125, nullable = false)
     private String lastName;
-
-    @Column(name = "birth_date", nullable = false)
-    @Temporal(TemporalType.DATE)
     private LocalDate birthDate;
-
-    @Column(name = "artist_name", length = 50, nullable = false)
     private String artistName;
-
-    @Column(name = "country_id_registration", length = 50, nullable = false)
     private String countryIdRegistration;
 
-    public DJ() {
+    public DJDtoResponse() {
     }
 
     public Long getIdDj() {
@@ -81,16 +70,21 @@ public class DJ {
         this.countryIdRegistration = countryIdRegistration;
     }
 
+    public void addHateosLink() {
+        this.add(linkTo(methodOn(DJController.class).findById(idDj)).withSelfRel());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DJ dj = (DJ) o;
-        return Objects.equals(idDj, dj.idDj);
+        if (!super.equals(o)) return false;
+        DJDtoResponse that = (DJDtoResponse) o;
+        return Objects.equals(idDj, that.idDj) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(birthDate, that.birthDate) && Objects.equals(artistName, that.artistName) && Objects.equals(countryIdRegistration, that.countryIdRegistration);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idDj);
+        return Objects.hash(super.hashCode(), idDj, firstName, lastName, birthDate, artistName, countryIdRegistration);
     }
 }
