@@ -1,9 +1,10 @@
 package br.com.wkreuch.services;
 
-import br.com.wkreuch.model.DJ;
-import br.com.wkreuch.repository.DJRepository;
+import br.com.wkreuch.models.DJ;
+import br.com.wkreuch.repositories.DJRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class DJService {
     @Autowired
     private DJRepository repository;
 
+    @Transactional
     public DJ create(DJ dj) {
         return repository.save(dj);
     }
@@ -26,6 +28,7 @@ public class DJService {
         return dj;
     }
 
+    @Transactional
     public DJ update(Long id, DJ dj) {
         DJ djPersisted = repository.findById(id).orElseThrow(() -> new RuntimeException("Not found Dj with this ID"));
         djPersisted.setFirstName(dj.getFirstName());
@@ -38,6 +41,7 @@ public class DJService {
         return djPersisted;
     }
 
+    @Transactional
     public void delete(Long id) {
         DJ djPersisted = repository.findById(id).orElseThrow(() -> new RuntimeException("Not found Dj with this ID"));
         repository.delete(djPersisted);

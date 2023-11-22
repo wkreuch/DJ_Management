@@ -1,7 +1,10 @@
 package br.com.wkreuch.controllers;
 
-import br.com.wkreuch.model.DJ;
+import br.com.wkreuch.data.dtos.DJDtoCreate;
+import br.com.wkreuch.models.DJ;
 import br.com.wkreuch.services.DJService;
+import jakarta.validation.Valid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +20,17 @@ public class DJController {
     private DJService service;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public DJ create(@RequestBody DJ dj) {
-        return service.create(dj);
+    public DJ create(@RequestBody @Valid DJDtoCreate djDtoCreate) {
+        DJ newDj = new DJ();
+        BeanUtils.copyProperties(djDtoCreate, newDj);
+        return service.create(newDj);
     }
 
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public DJ update(@PathVariable(value = "id") Long id, @RequestBody DJ dj) {
-        return service.update(id, dj);
+    public DJ update(@PathVariable(value = "id") Long id, @RequestBody @Valid DJDtoCreate djDtoCreate) {
+        DJ updateDj = new DJ();
+        BeanUtils.copyProperties(djDtoCreate, updateDj);
+        return service.update(id, updateDj);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

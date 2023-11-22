@@ -1,4 +1,4 @@
-package br.com.wkreuch.model;
+package br.com.wkreuch.models;
 
 import jakarta.persistence.*;
 
