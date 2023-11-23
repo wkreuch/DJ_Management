@@ -1,6 +1,7 @@
 package br.com.wkreuch.data.dtos;
 
 import br.com.wkreuch.controllers.DJController;
+import jakarta.persistence.Embedded;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.util.Objects;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-public class DJDtoResponse extends RepresentationModel<DJDtoResponse> implements Serializable {
+public class DJResponseDto extends RepresentationModel<DJResponseDto> implements Serializable {
 
     private Long idDj;
     private String firstName;
@@ -19,7 +20,9 @@ public class DJDtoResponse extends RepresentationModel<DJDtoResponse> implements
     private String artistName;
     private String countryIdRegistration;
 
-    public DJDtoResponse() {
+    @Embedded
+    private AddressResponseDto address;
+    public DJResponseDto() {
     }
 
     public Long getIdDj() {
@@ -70,8 +73,8 @@ public class DJDtoResponse extends RepresentationModel<DJDtoResponse> implements
         this.countryIdRegistration = countryIdRegistration;
     }
 
-    public void addHateosLink() {
-        this.add(linkTo(methodOn(DJController.class).findById(idDj)).withSelfRel());
+    public AddressResponseDto getAddress() {
+        return address;
     }
 
     @Override
@@ -79,12 +82,21 @@ public class DJDtoResponse extends RepresentationModel<DJDtoResponse> implements
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        DJDtoResponse that = (DJDtoResponse) o;
-        return Objects.equals(idDj, that.idDj) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(birthDate, that.birthDate) && Objects.equals(artistName, that.artistName) && Objects.equals(countryIdRegistration, that.countryIdRegistration);
+        DJResponseDto that = (DJResponseDto) o;
+        return Objects.equals(idDj, that.idDj) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(birthDate, that.birthDate) && Objects.equals(artistName, that.artistName) && Objects.equals(countryIdRegistration, that.countryIdRegistration) && Objects.equals(address, that.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), idDj, firstName, lastName, birthDate, artistName, countryIdRegistration);
+        return Objects.hash(super.hashCode(), idDj, firstName, lastName, birthDate, artistName, countryIdRegistration, address);
     }
+
+    public void setAddress(AddressResponseDto address) {
+        this.address = address;
+    }
+
+    public void addHateosLink() {
+        this.add(linkTo(methodOn(DJController.class).findById(idDj)).withSelfRel());
+    }
+
 }

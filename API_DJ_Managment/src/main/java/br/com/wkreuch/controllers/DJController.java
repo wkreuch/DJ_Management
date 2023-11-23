@@ -1,11 +1,11 @@
 package br.com.wkreuch.controllers;
 
-import br.com.wkreuch.data.dtos.DJDtoCreate;
-import br.com.wkreuch.data.dtos.DJDtoResponse;
+import br.com.wkreuch.data.dtos.DJCreateDto;
+import br.com.wkreuch.data.dtos.DJResponseDto;
 import br.com.wkreuch.models.DJ;
 import br.com.wkreuch.services.DJService;
+import br.com.wkreuch.utils.mapper.DjMapper;
 import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,27 +21,25 @@ public class DJController {
     private DJService service;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public DJDtoResponse create(@RequestBody @Valid DJDtoCreate djDtoCreate) {
-        DJ newDj = new DJ();
-        BeanUtils.copyProperties(djDtoCreate, newDj);
-        return createDtoResponseWithHateoas(service.create(newDj));
+    public DJResponseDto create(@RequestBody @Valid DJCreateDto djCreateDto) {
+        DJ newDj = DjMapper.convert(djCreateDto);
+        return DjMapper.convert(service.create(newDj), true);
     }
 
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public DJDtoResponse update(@PathVariable(value = "id") Long id, @RequestBody @Valid DJDtoCreate djDtoCreate) {
-        DJ updateDj = new DJ();
-        BeanUtils.copyProperties(djDtoCreate, updateDj);
-        return createDtoResponseWithHateoas(service.update(id, updateDj));
+    public DJResponseDto update(@PathVariable(value = "id") Long id, @RequestBody @Valid DJCreateDto djCreateDto) {
+        DJ updateDj = DjMapper.convert(djCreateDto);
+        return DjMapper.convert(service.update(id, updateDj),true);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public List<DJDtoResponse> findAll() {
-        return createDtoResponseWithHateoasList(service.findAll());
+    public List<DJResponseDto> findAll() {
+        return DjMapper.convert(service.findAll(),true);
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public DJDtoResponse findById(@PathVariable(value = "id") Long id) {
-        return createDtoResponseWithHateoas(service.findById(id));
+    public DJResponseDto findById(@PathVariable(value = "id") Long id) {
+        return DjMapper.convert(service.findById(id),true);
     }
 
     @DeleteMapping(path = "/{id}")
@@ -50,13 +48,4 @@ public class DJController {
         return ResponseEntity.noContent().build();
     }
 
-    private static List<DJDtoResponse> createDtoResponseWithHateoasList(List<DJ> newDjs) {
-        return newDjs.stream().map(DJController::createDtoResponseWithHateoas).toList();
-    }
-    private static DJDtoResponse createDtoResponseWithHateoas(DJ newDj) {
-        DJDtoResponse djResponse = new DJDtoResponse();
-        BeanUtils.copyProperties(newDj, djResponse);
-        djResponse.addHateosLink();
-        return djResponse;
-    }
 }

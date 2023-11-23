@@ -1,5 +1,6 @@
 package br.com.wkreuch.models;
 
+import br.com.wkreuch.data.vos.AddressVo;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -29,6 +30,9 @@ public class DJ {
 
     @Column(name = "country_id_registration", length = 50, nullable = false)
     private String countryIdRegistration;
+
+    @Embedded
+    private AddressVo address;
 
     public DJ() {
     }
@@ -79,6 +83,14 @@ public class DJ {
 
     public void setCountryIdRegistration(String countryIdRegistration) {
         this.countryIdRegistration = countryIdRegistration;
+    }
+
+    public AddressVo getAddress() {
+        return address;
+    }
+
+    public void setAddress(AddressVo address) {
+        this.address = address;
     }
 
     @Override
