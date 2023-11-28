@@ -2,6 +2,7 @@ package br.com.wkreuch.services;
 
 import br.com.wkreuch.models.DJ;
 import br.com.wkreuch.repositories.DJRepository;
+import br.com.wkreuch.utils.mapper.DjMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,11 +32,8 @@ public class DJService {
     @Transactional
     public DJ update(Long id, DJ dj) {
         DJ djPersisted = repository.findById(id).orElseThrow(() -> new RuntimeException("Not found Dj with this ID"));
-        djPersisted.setFirstName(dj.getFirstName());
-        djPersisted.setLastName(dj.getLastName());
-        djPersisted.setCountryIdRegistration(dj.getCountryIdRegistration());
-        djPersisted.setBirthDate(dj.getBirthDate());
-        djPersisted.setArtistName(dj.getArtistName());
+
+        DjMapper.copyProperties(dj, djPersisted, "idDj");
 
         djPersisted = repository.save(djPersisted);
         return djPersisted;
