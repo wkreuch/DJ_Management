@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +91,6 @@ public class DJController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content)
             })
-
     public ResponseEntity<?> delete(@PathVariable(value = "id") Long id){
         service.delete(id);
         return ResponseEntity.noContent().build();
