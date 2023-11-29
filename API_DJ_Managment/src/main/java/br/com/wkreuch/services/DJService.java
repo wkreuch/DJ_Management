@@ -1,5 +1,8 @@
 package br.com.wkreuch.services;
 
+import br.com.wkreuch.exceptions.ErrorCode;
+import br.com.wkreuch.exceptions.RequiredObjectIsNullException;
+import br.com.wkreuch.exceptions.ResourceNotFoundException;
 import br.com.wkreuch.models.DJ;
 import br.com.wkreuch.repositories.DJRepository;
 import br.com.wkreuch.utils.mapper.DjMapper;
@@ -17,6 +20,7 @@ public class DJService {
 
     @Transactional
     public DJ create(DJ dj) {
+        if (dj == null) throw new RequiredObjectIsNullException();
         return repository.save(dj);
     }
 
@@ -25,13 +29,14 @@ public class DJService {
     }
 
     public DJ findById(Long id) {
-        DJ dj = repository.findById(id).orElseThrow(() -> new RuntimeException("Not found Dj with this ID"));
-        return dj;
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.NOT_FOUND.getMessage()));
     }
 
     @Transactional
     public DJ update(Long id, DJ dj) {
-        DJ djPersisted = repository.findById(id).orElseThrow(() -> new RuntimeException("Not found Dj with this ID"));
+        if (dj == null) throw new RequiredObjectIsNullException();
+
+        DJ djPersisted = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.NOT_FOUND.getMessage()));
 
         DjMapper.copyProperties(dj, djPersisted, "idDj");
 
@@ -41,7 +46,7 @@ public class DJService {
 
     @Transactional
     public void delete(Long id) {
-        DJ djPersisted = repository.findById(id).orElseThrow(() -> new RuntimeException("Not found Dj with this ID"));
+        DJ djPersisted = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.NOT_FOUND.getMessage()));
         repository.delete(djPersisted);
     }
 }
