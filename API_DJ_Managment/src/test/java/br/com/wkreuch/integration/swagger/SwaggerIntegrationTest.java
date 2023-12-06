@@ -1,4 +1,4 @@
-package br.com.wkreuch.swagger;
+package br.com.wkreuch.integration.swagger;
 
 import br.com.wkreuch.config.TestConfigs;
 import br.com.wkreuch.config.containers.AbstractIntegration;

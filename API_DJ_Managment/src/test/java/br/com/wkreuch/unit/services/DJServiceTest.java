@@ -1,4 +1,4 @@
-package br.com.wkreuch.services;
+package br.com.wkreuch.unit.services;
 
 import br.com.wkreuch.exceptions.ErrorCode;
 import br.com.wkreuch.exceptions.RequiredObjectIsNullException;
@@ -6,6 +6,7 @@ import br.com.wkreuch.exceptions.ResourceNotFoundException;
 import br.com.wkreuch.models.DJ;
 import br.com.wkreuch.models.mock.DJMock;
 import br.com.wkreuch.repositories.DJRepository;
+import br.com.wkreuch.services.DJService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
