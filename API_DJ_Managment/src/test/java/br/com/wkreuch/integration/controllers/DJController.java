@@ -1,5 +1,6 @@
 package br.com.wkreuch.integration.controllers;
 
+import br.com.wkreuch.adapters.LocalDateAdapter;
 import br.com.wkreuch.config.TestConfigs;
 import br.com.wkreuch.config.containers.AbstractIntegration;
 import br.com.wkreuch.models.data.dtos.AddressCreateDto;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -183,6 +185,51 @@ public class DJController extends AbstractIntegration {
 
     }
 
+    @Test
+    @Order(6)
+    public void testFindAll() throws JsonProcessingException {
+
+        for (int i = 0; i < 3; i++) {
+            mockDjCreate();
+            djCreateDto.setFirstName(djCreateDto.getFirstName() + i);
+
+            var content = given().spec(specification)
+                    .body(djCreateDto)
+                    .when()
+                    .post()
+                    .then()
+                    .statusCode(200)
+                    .extract()
+                    .body()
+                    .asString();
+
+            DJResponseDto djResponseDto = objectMapper.readValue(content, DJResponseDto.class);
+
+            assertNotNull(djResponseDto);
+            assertNotNull(djResponseDto.getIdDj());
+
+        }
+
+        var content = given().spec(specification)
+                .when()
+                .get()
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .asString();
+
+        assertNotNull(content);
+
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                .create();
+        Type djResponseDtoType = new TypeToken<ArrayList<DJResponseDto>>(){}.getType();
+        ArrayList<DJResponseDto> djResponseDtos = gson.fromJson(content, djResponseDtoType);
+
+        assertEquals(3,djResponseDtos.size());
+
+    }
     private void mockDjCreate() {
         djCreateDto.setFirstName("Pierre David");
         djCreateDto.setLastName("Guetta");
