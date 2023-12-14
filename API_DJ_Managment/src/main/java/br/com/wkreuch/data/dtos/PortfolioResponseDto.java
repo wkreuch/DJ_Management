@@ -1,10 +1,16 @@
 package br.com.wkreuch.data.dtos;
 
+import br.com.wkreuch.controllers.DJController;
 import br.com.wkreuch.models.enums.TypePortfolio;
+import org.springframework.hateoas.RepresentationModel;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class PortfolioResponseDto {
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+public class PortfolioResponseDto extends RepresentationModel<DJResponseDto> implements Serializable  {
 
     private String link;
 
@@ -49,6 +55,9 @@ public class PortfolioResponseDto {
         this.idDj = idDj;
     }
 
+    public void addHateosLink() {
+        this.add(linkTo(methodOn(DJController.class).findById(idDj)).withSelfRel());
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

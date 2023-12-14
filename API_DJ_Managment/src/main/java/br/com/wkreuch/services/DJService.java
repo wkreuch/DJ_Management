@@ -16,37 +16,37 @@ import java.util.List;
 public class DJService {
 
     @Autowired
-    private DJRepository repository;
+    private DJRepository djRepository;
 
     @Transactional
     public DJ create(DJ dj) {
         if (dj == null) throw new RequiredObjectIsNullException();
-        return repository.save(dj);
+        return djRepository.save(dj);
     }
 
     public List<DJ> findAll() {
-        return repository.findAll();
+        return djRepository.findAll();
     }
 
     public DJ findById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.NOT_FOUND.getMessage()));
+        return djRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.NOT_FOUND.getMessage()));
     }
 
     @Transactional
     public DJ update(Long id, DJ dj) {
         if (dj == null) throw new RequiredObjectIsNullException();
 
-        DJ djPersisted = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.NOT_FOUND.getMessage()));
+        DJ djPersisted = djRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.NOT_FOUND.getMessage()));
 
         DjMapper.copyProperties(dj, djPersisted, "idDj");
 
-        djPersisted = repository.save(djPersisted);
+        djPersisted = djRepository.save(djPersisted);
         return djPersisted;
     }
 
     @Transactional
     public void delete(Long id) {
-        DJ djPersisted = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.NOT_FOUND.getMessage()));
-        repository.delete(djPersisted);
+        DJ djPersisted = djRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.NOT_FOUND.getMessage()));
+        djRepository.delete(djPersisted);
     }
 }
