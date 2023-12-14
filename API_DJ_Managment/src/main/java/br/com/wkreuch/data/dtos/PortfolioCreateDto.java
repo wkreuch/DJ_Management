@@ -1,41 +1,27 @@
-package br.com.wkreuch.models;
+package br.com.wkreuch.data.dtos;
 
 import br.com.wkreuch.models.enums.TypePortfolio;
-import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 
-@Entity
-@Table(name = "portfolios")
-public class Portfolio {
+public class PortfolioCreateDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idPortfolio;
-
-    @Column(length = 2000)
+    @Size(max = 2000)
     private String link;
 
-    @Column(length = 500)
+    @Size(max = 500)
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
+    @NotBlank
     private TypePortfolio typePortfolio;
 
-    @ManyToOne
-    @JoinColumn(name = "idDj")
-    private DJ dj;
+    @NotNull
+    private Long idDj;
 
-    public Portfolio() {
-    }
-
-    public Long getIdPortfolio() {
-        return idPortfolio;
-    }
-
-    public void setIdPortfolio(Long idPortfolio) {
-        this.idPortfolio = idPortfolio;
+    public PortfolioCreateDto() {
     }
 
     public String getLink() {
@@ -62,24 +48,24 @@ public class Portfolio {
         this.typePortfolio = typePortfolio;
     }
 
-    public DJ getDj() {
-        return dj;
+    public Long getIdDj() {
+        return idDj;
     }
 
-    public void setDj(DJ dj) {
-        this.dj = dj;
+    public void setIdDj(Long idDj) {
+        this.idDj = idDj;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Portfolio portfolio = (Portfolio) o;
-        return Objects.equals(idPortfolio, portfolio.idPortfolio);
+        PortfolioCreateDto that = (PortfolioCreateDto) o;
+        return Objects.equals(link, that.link) && Objects.equals(description, that.description) && typePortfolio == that.typePortfolio && Objects.equals(idDj, that.idDj);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idPortfolio);
+        return Objects.hash(link, description, typePortfolio, idDj);
     }
 }
