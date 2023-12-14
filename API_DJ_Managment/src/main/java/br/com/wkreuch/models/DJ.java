@@ -4,6 +4,7 @@ import br.com.wkreuch.data.vos.AddressVo;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -34,6 +35,8 @@ public class DJ {
     @Embedded
     private AddressVo address;
 
+    @OneToMany(mappedBy = "dj", cascade = CascadeType.ALL)
+    private List<Portfolio> portfolios;
     public DJ() {
     }
 
@@ -91,6 +94,10 @@ public class DJ {
 
     public void setAddress(AddressVo address) {
         this.address = address;
+    }
+
+    public List<Portfolio> getPortfolios() {
+        return portfolios;
     }
 
     @Override
