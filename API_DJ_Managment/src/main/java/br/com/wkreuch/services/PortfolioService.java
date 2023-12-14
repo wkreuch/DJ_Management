@@ -3,7 +3,9 @@ package br.com.wkreuch.services;
 import br.com.wkreuch.exceptions.ErrorCode;
 import br.com.wkreuch.exceptions.RequiredObjectIsNullException;
 import br.com.wkreuch.exceptions.ResourceNotFoundException;
+import br.com.wkreuch.models.DJ;
 import br.com.wkreuch.models.Portfolio;
+import br.com.wkreuch.repositories.DJRepository;
 import br.com.wkreuch.repositories.PortfolioRepository;
 import br.com.wkreuch.utils.mapper.PortfolioMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +20,16 @@ public class PortfolioService {
     @Autowired
     private PortfolioRepository portfolioRepository;
 
+    @Autowired
+    private DJService djService;
+
     @Transactional
-    public Portfolio create(Portfolio portfolio) {
+    public Portfolio create(Portfolio portfolio, Long idDj) {
         if (portfolio == null) throw new RequiredObjectIsNullException();
+        if (idDj == null) throw new RequiredObjectIsNullException();
+
+        DJ dj = djService.findById(idDj);
+        portfolio.setDj(dj);
 
         return portfolioRepository.save(portfolio);
     }
@@ -34,12 +43,12 @@ public class PortfolioService {
     }
 
     @Transactional
-    public Portfolio update(Long id, Portfolio portfolio) {
+    public Portfolio update(Long idPortfolio, Portfolio portfolio) {
         if (portfolio == null) throw new RequiredObjectIsNullException();
 
-        Portfolio portfolioPersisted = portfolioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.NOT_FOUND.getMessage()));
+        Portfolio portfolioPersisted = portfolioRepository.findById(idPortfolio).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.NOT_FOUND.getMessage()));
 
-        PortfolioMapper.copyProperties(portfolio, portfolioPersisted, "idPortfolio");
+        PortfolioMapper.copyProperties(portfolio, portfolioPersisted, "idPortfolio", "dj");
 
         portfolioPersisted = portfolioRepository.save(portfolioPersisted);
         return portfolioPersisted;

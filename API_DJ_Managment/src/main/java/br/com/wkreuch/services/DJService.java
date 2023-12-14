@@ -29,7 +29,7 @@ public class DJService {
     }
 
     public DJ findById(Long id) {
-        return djRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.NOT_FOUND.getMessage()));
+        return djRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.NOT_FOUND.getMessage() + " Dj"));
     }
 
     @Transactional

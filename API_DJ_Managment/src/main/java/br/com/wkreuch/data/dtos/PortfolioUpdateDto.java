@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 
-public class PortfolioCreateDto {
+public class PortfolioUpdateDto {
 
     @Size(max = 2000)
     private String link;
@@ -17,10 +17,7 @@ public class PortfolioCreateDto {
     @NotNull
     private TypePortfolio typePortfolio;
 
-    @NotNull
-    private Long idDj;
-
-    public PortfolioCreateDto() {
+    public PortfolioUpdateDto() {
     }
 
     public String getLink() {
@@ -47,24 +44,16 @@ public class PortfolioCreateDto {
         this.typePortfolio = typePortfolio;
     }
 
-    public Long getIdDj() {
-        return idDj;
-    }
-
-    public void setIdDj(Long idDj) {
-        this.idDj = idDj;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PortfolioCreateDto that = (PortfolioCreateDto) o;
-        return Objects.equals(link, that.link) && Objects.equals(description, that.description) && typePortfolio == that.typePortfolio && Objects.equals(idDj, that.idDj);
+        PortfolioUpdateDto that = (PortfolioUpdateDto) o;
+        return Objects.equals(link, that.link) && Objects.equals(description, that.description) && typePortfolio == that.typePortfolio;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(link, description, typePortfolio, idDj);
+        return Objects.hash(link, description, typePortfolio);
     }
 }

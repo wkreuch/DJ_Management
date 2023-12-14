@@ -1,6 +1,7 @@
 package br.com.wkreuch.data.dtos;
 
 import br.com.wkreuch.controllers.DJController;
+import br.com.wkreuch.controllers.PortfolioController;
 import br.com.wkreuch.models.enums.TypePortfolio;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -12,6 +13,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 public class PortfolioResponseDto extends RepresentationModel<DJResponseDto> implements Serializable  {
 
+    private Long idPortfolio;
+
     private String link;
 
     private String description;
@@ -21,6 +24,14 @@ public class PortfolioResponseDto extends RepresentationModel<DJResponseDto> imp
     private Long idDj;
 
     public PortfolioResponseDto() {
+    }
+
+    public Long getIdPortfolio() {
+        return idPortfolio;
+    }
+
+    public void setIdPortfolio(Long idPortfolio) {
+        this.idPortfolio = idPortfolio;
     }
 
     public String getLink() {
@@ -56,18 +67,20 @@ public class PortfolioResponseDto extends RepresentationModel<DJResponseDto> imp
     }
 
     public void addHateosLink() {
-        this.add(linkTo(methodOn(DJController.class).findById(idDj)).withSelfRel());
+        this.add(linkTo(methodOn(PortfolioController.class).findById(idPortfolio)).withSelfRel());
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         PortfolioResponseDto that = (PortfolioResponseDto) o;
-        return Objects.equals(link, that.link) && Objects.equals(description, that.description) && typePortfolio == that.typePortfolio && Objects.equals(idDj, that.idDj);
+        return Objects.equals(idPortfolio, that.idPortfolio) && Objects.equals(link, that.link) && Objects.equals(description, that.description) && typePortfolio == that.typePortfolio && Objects.equals(idDj, that.idDj);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(link, description, typePortfolio, idDj);
+        return Objects.hash(super.hashCode(), idPortfolio, link, description, typePortfolio, idDj);
     }
 }

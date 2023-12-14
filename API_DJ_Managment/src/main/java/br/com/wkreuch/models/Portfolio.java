@@ -24,7 +24,7 @@ public class Portfolio {
     private TypePortfolio typePortfolio;
 
     @ManyToOne
-    @JoinColumn(name = "idDj")
+    @JoinColumn(name = "idDj", nullable = false)
     private DJ dj;
 
     public Portfolio() {
