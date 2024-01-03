@@ -11,7 +11,16 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
       show-sql: false
+    servlet:
+      multipart:
+        enabled: true
+        file-size-threshold: 2KB
+        max-file-size: 200MB
+        max-request-size: 215MB
 springdoc:
   pathsToMatch: /api/**/
   swagger-ui:
     use-root-path: true
+file:
+  portfolio:
+    upload-dir: /UploadDir

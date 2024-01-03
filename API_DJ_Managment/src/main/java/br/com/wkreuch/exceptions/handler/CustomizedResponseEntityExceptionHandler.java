@@ -1,8 +1,6 @@
 package br.com.wkreuch.exceptions.handler;
 
-import br.com.wkreuch.exceptions.ExceptionResponse;
-import br.com.wkreuch.exceptions.RequiredObjectIsNullException;
-import br.com.wkreuch.exceptions.ResourceNotFoundException;
+import br.com.wkreuch.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -41,4 +39,18 @@ public class CustomizedResponseEntityExceptionHandler {
         ExceptionResponse exceptionResponse = new ExceptionResponse(Instant.now(), exception.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(FileStorageException.class)
+    public final ResponseEntity<ExceptionResponse> handlerFileStorageExceptions(Exception exception, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(Instant.now(), exception.getMessage() + exception.getCause(), request.getDescription(true));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MyFileNotFoundException.class)
+    public final ResponseEntity<ExceptionResponse> handlerMyFileNotFoundExceptions(Exception exception, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(Instant.now(), exception.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+
 }
