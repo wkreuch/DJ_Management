@@ -24,7 +24,6 @@ import org.testcontainers.shaded.com.google.common.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class DJController extends AbstractIntegration {
+public class DJControllerTest extends AbstractIntegration {
 
     private static RequestSpecification specification;
     private static ObjectMapper objectMapper;
